@@ -1,5 +1,14 @@
 import "./App.css";
 import React, { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+import {
+  Home,
+  About,
+  Page404,
+  Services,
+  Location,
+  CompanyHistory,
+} from "./pages";
 
 function App({ login }) {
   const [data, setData] = useState(null);
@@ -7,7 +16,7 @@ function App({ login }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch(`htps://api.github.com/users/${login}`)
+    fetch(`https://api.github.com/users/${login}`)
       .then((response) => response.json())
       .then(setData)
       .then(() => setLoading(false))
@@ -26,6 +35,16 @@ function App({ login }) {
   if (data) {
     return (
       <div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />}>
+            <Route path="services" element={<Services />} />
+            <Route path="history" element={<CompanyHistory />} />
+            <Route path="location" element={<Location />} />
+          </Route>
+          <Route path="*" element={<Page404 />} />
+        </Routes>
+
         <h1>{data.name}</h1>
         <p>{data.company}</p>
         <img alt={data.login} src={data.avatar_url} />
